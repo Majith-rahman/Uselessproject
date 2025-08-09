@@ -51,13 +51,13 @@ The application listens to voice input for a single letter (A-Z). Upon recognizi
 For Software:
 
 # Screenshots (Add at least 3)
-![](C:\Users\Abu\Documents\GitHub\uselessproject\Screenshot 2025-08-09 052440.png)
+![](First view.jpg)
 The QWERTY keyboard layout with keys that light up when you say a letter.
 
-![](C:\Users\Abu\Documents\GitHub\uselessproject\Screenshot 2025-08-09 052521.png)
+![](Second.jpg)
 The status bar shows when the app is listening and displays the detected letter.
 
-![](C:\Users\Abu\Documents\GitHub\uselessproject\Screenshot 2025-08-09 052539.png)
+![](Third.jpg)
 Embedded YouTube player below the keyboard playing the assigned song.
 
 ## Team Contributions
