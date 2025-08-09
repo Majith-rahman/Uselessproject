@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Karaoke Keyboard (QWERTY Layout)</title>
+  <style>
+    body {
+      background: #111;
+      color: white;
+      text-align: center;
+      font-family: Arial, sans-serif;
+    }
+    h1 {
+      margin-top: 20px;
+    }
+    .keyboard {
+      display: inline-flex;
+      flex-direction: column;
+      align-items: center;
+      margin-top: 20px;
+      gap: 8px;
+      padding: 8px;
+      border: 3px solid #555;       
+      border-radius: 12px;
+      background: #1a1a1a;           
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.8);
+    }
+    .row {
+      display: flex;
+      gap: 6px;
+      justify-content: center;
+    }
+    .key {
+      width: 50px;
+      height: 50px;
+      background: #333;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      transition: background 0.3s, transform 0.2s;
+      border: 1px solid #555;                   
+      box-shadow: 0 3px 6px rgba(0,0,0,0.5); 
+    }
+    .highlight {
+      background: yellow;
+      color: black;
+      transform: scale(1.2);
+      box-shadow: 0 0 20px yellow;
+    }
+    button {
+      margin-top: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background: #28a745;
+      border: none;
+      color: white;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+    #status {
+      margin-top: 15px;
+      font-size: 18px;
+      color: #ccc;
+    }
+    #player {
+      margin-top: 20px;
+    }
+    iframe {
+      width: 560px;
+      height: 315px;
+      border: none;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎤 Karaoke Keyboard</h1>
+  <p>Click "Start Listening" and say a letter (A–Z)</p>
+
+  <div class="keyboard" id="keyboard">
+    <div class="row" id="row1"></div>
+    <div class="row" id="row2"></div>
+    <div class="row" id="row3"></div>
+  </div>
+
+  <button onclick="startListening()">Start Listening</button>
+  <div id="status"></div>
+
+  <!-- Embedded YouTube player area -->
+  <div id="player"></div>
+
+  <script>
+    const songList = {
+      A: "https://youtu.be/dAezp422I_A",
+      B: "https://www.youtube.com/watch?v=fLexgOxsZu0",  
+      C: "https://youtu.be/_hgXOyA97dI",
+      D: "https://youtu.be/-gX-ZEBGEe8",
+      E: "https://youtube.com/shorts/PCLOPPL4DkQ",
+      F: "https://youtu.be/v1Kj7voPD2o",
+      G: "https://youtu.be/9bZkp7q19f0",
+      H: "https://youtu.be/znvVpxyYexI",
+      I: "https://youtu.be/g4lx5oz_9ko",
+      J: "https://youtu.be/QcESg-9Vfzo",
+      K: "https://youtu.be/YR12Z8f1Dh8",
+      L: "https://youtu.be/7-7knsP2n5w",
+      M: "https://youtu.be/hBT1gbs6xpg",
+      N: "https://youtu.be/efD1V99I0NE",
+      O: "https://youtu.be/Y1UhSmNZcls",
+      P: "https://youtu.be/YyQ3fotpuyU",
+      Q: "https://youtu.be/pBLZIYTNrPc",
+      R: "https://youtu.be/ixlXwdmZ3Kg",
+      S: "https://youtu.be/JEeEApK-XqE",
+      T: "https://youtu.be/kPa7bsKwL-c",
+      U: "https://youtu.be/l0yU-mcCM9I",
+      V: "https://youtu.be/W6-O00alJUo",
+      W: "https://youtube.com/shorts/8pIIawwHRV8",
+      X: "https://youtube.com/shorts/mBCC49e6d8E",
+      Y: "https://youtube.com/shorts/lulNb8-HEZk",
+      Z: "https://youtu.be/CdqMZ_s7Y6k"
+    };
+
+    const layout = {
+      row1: ['Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P'],
+      row2: ['A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L'],
+      row3: ['Z', 'X', 'C', 'V', 'B', 'N', 'M']
+    };
+
+    for (const rowId in layout) {
+      const row = document.getElementById(rowId);
+      layout[rowId].forEach(letter => {
+        const key = document.createElement("div");
+        key.classList.add("key");
+        key.id = letter;
+        key.textContent = letter;
+        row.appendChild(key);
+      });
+    }
+
+    function highlightKey(letter) {
+      document.querySelectorAll(".key").forEach(k => k.classList.remove("highlight"));
+      const key = document.getElementById(letter);
+      if (key) {
+        key.classList.add("highlight");
+        playSong(letter);
+      }
+    }
+
+    function playSong(letter) {
+      if (songList[letter]) {
+        const url = songList[letter];
+        const embedUrl = convertToEmbed(url);
+        document.getElementById("player").innerHTML =
+          `<iframe src="${embedUrl}" allowfullscreen></iframe>`;
+      } else {
+        document.getElementById("player").innerHTML = "";
+        alert("No song for letter: " + letter);
+      }
+    }
+
+    function convertToEmbed(url) {
+      
+      if (url.includes("youtu.be/")) {
+        return "https://www.youtube.com/embed/" + url.split("youtu.be/")[1].split("?")[0];
+      } else if (url.includes("watch?v=")) {
+        return "https://www.youtube.com/embed/" + url.split("watch?v=")[1].split("&")[0];
+      } else if (url.includes("shorts/")) {
+        return "https://www.youtube.com/embed/" + url.split("shorts/")[1].split("?")[0];
+      }
+      return url;
+    }
+
+    function startListening() {
+      const status = document.getElementById("status");
+      if (!('webkitSpeechRecognition' in window)) {
+        alert("Speech Recognition not supported in this browser. Please use Google Chrome.");
+        return;
+      }
+      const recognition = new webkitSpeechRecognition();
+      recognition.lang = "en-US";
+      recognition.continuous = false;
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+
+      if ('webkitSpeechGrammarList' in window) {
+        const SpeechGrammarList = window.SpeechGrammarList || window.webkitSpeechGrammarList;
+        const grammar = '#JSGF V1.0; grammar letters; public <letter> = A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T | U | V | W | X | Y | Z ;';
+        const speechRecognitionList = new SpeechGrammarList();
+        speechRecognitionList.addFromString(grammar, 1);
+        recognition.grammars = speechRecognitionList;
+      }
+
+      status.textContent = "🎧 Listening... Say a letter A–Z";
+
+      recognition.onresult = function(event) {
+        let letter = event.results[0][0].transcript.trim().toUpperCase();
+        letter = letter[0];
+        if (/^[A-Z]$/.test(letter)) {
+          status.textContent = `🔤 You said: ${letter}`;
+          highlightKey(letter);
+        } else {
+          status.textContent = "❗ Please say a single letter A–Z.";
+        }
+      };
+
+      recognition.onerror = function() {
+        status.textContent = "❌ Error occurred during recognition. Try again.";
+      };
+
+      recognition.onend = function() {
+        status.textContent += " — done listening.";
+      };
+
+      recognition.start();
+    }
+  </script>
+</body>
+</html>
