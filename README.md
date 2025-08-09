@@ -51,7 +51,7 @@ The application listens to voice input for a single letter (A-Z). Upon recognizi
 For Software:
 
 # Screenshots (Add at least 3)
-![](First view.jpg)
+![](First.jpg)
 The QWERTY keyboard layout with keys that light up when you say a letter.
 
 ![](Second.jpg)
